@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^ziav+1gjl+sd@9%pd7lt)!7*cn*7vx4a2aejk)$!whl-c$3ep'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
@@ -136,4 +136,4 @@ EMAIL_HOST_USER = 'nima7playstation4@gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD = 'cdsisdfsdpsolmts'
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = '7nimor'
+DEFAULT_FROM_EMAIL = '7nimor website'
