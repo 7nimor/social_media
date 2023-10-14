@@ -1,0 +1,46 @@
+<header class="hesder">
+
+    <div class="col-2 content1">
+        <div class="col-3 box-home">
+            <div class="box">
+                <h2><a href="{% url 'home:home' %}">Home</a></h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-3 form-box">
+        <div class="search-box">
+            <input class="search-text" type="text" name="" placeholder="type to search...">
+            <button type="submit" name="">
+                <a class="search-btn" href="">
+                    <img class="icon" src="https://img.icons8.com/ios-glyphs/30/search--v1.png" alt="search--v1">
+                </a>
+            </button>
+        </div>
+        {% if request.user.is_authenticated %}
+            <div class="col-3 box-about">
+                <div class="box">
+                    <h2><a href="{% url 'account:profile' request.user.id %}">Profile</a></h2>
+                </div>
+               <div class="box">
+                    <h2><a href="{% url 'account:logout' %}">Logout</a></h2>
+                </div>
+            </div>
+        {% else %}
+
+            </div>
+            <div class="col-2 entrance">
+                <div class="col-3 login">
+                    <div class="box">
+                        <h2><a href="{% url 'account:login' %}">Login</a></h2>
+                    </div>
+                </div>
+                <div class="col-3 singup">
+                    <div class="box">
+                        <h2><a href="{% url 'account:register' %}">Register</a></h2>
+                    </div>
+
+                </div>
+            </div>
+        {% endif %}
+
+</header>
