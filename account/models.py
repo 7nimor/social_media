@@ -18,3 +18,12 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('home:post_detail', args=(self.id, self.slug))
+
+
+class Relation(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_user')
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.from_user} follow {self.to_user}'

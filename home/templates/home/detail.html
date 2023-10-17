@@ -6,4 +6,5 @@
         <a class="btn btn-success" href="{% url 'home:post_update' post.id %}">Update</a>
     {% endif %}
     <p>{{ post.body }}</p>
+    <a href="{% url 'account:profile' post.user.id %}">{{ post.user }}</a>
 {% endblock %}

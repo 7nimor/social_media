@@ -8,6 +8,8 @@ from .forms import RegisterForm, LoginForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from .models import Relation
+
 
 class UserRegisterView(View):
     form_class = RegisterForm
@@ -67,9 +69,13 @@ class UserLogoutView(LoginRequiredMixin, View):
 
 class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
+        is_follow = False
         user = get_object_or_404(User, pk=user_id)
+        relation = Relation.objects.filter(from_user=request.user, to_user=user)
+        if relation.exists():
+            is_follow = True
         posts = user.posts.all()
-        return render(request, 'account/profile.html', {'user': user, 'posts': posts})
+        return render(request, 'account/profile.html', {'user': user, 'posts': posts, 'is_follow': is_follow})
 
 
 class UserPasswordResetView(auth_view.PasswordResetView):
@@ -89,3 +95,31 @@ class UserPasswordResetConfirmView(auth_view.PasswordResetConfirmView):
 
 class UserPasswordResetCompleteView(auth_view.PasswordResetCompleteView):
     template_name = 'account/password_reset_complete.html'
+
+
+class UserFollowView(LoginRequiredMixin, View):
+    def get(self, request, user_id):
+        user = User.objects.get(pk=user_id)
+        relation = Relation.objects.filter(from_user=request.user, to_user=user)
+        if relation.exists():
+            messages.error(request, 'you are already following this person', 'danger')
+        else:
+            Relation(
+                from_user=request.user,
+                to_user=user
+            ).save()
+            messages.success(request, 'you following this person', 'success')
+        return redirect('account:profile', user.id)
+
+
+class UserUnfollowView(LoginRequiredMixin, View):
+    def get(self, request, user_id):
+        user = User.objects.get(pk=user_id)
+        relation = Relation.objects.filter(from_user=request.user, to_user=user)
+        if relation.exists():
+            relation.delete()
+            messages.success(request, 'you unfollow this person', 'success')
+        else:
+            messages.error(request, 'you are not follow ', 'success')
+
+        return redirect('account:profile', user.id)

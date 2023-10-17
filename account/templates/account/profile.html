@@ -6,7 +6,12 @@
     {% if request.user.id == user.id %}
         <a class="btn btn-info" href="{% url 'home:post_create' %}">Create</a>
     {% endif %}
+    {% if request.user.id != user.id and not is_follow %}
+        <a class="btn btn-primary" href="{% url 'account:follow' user.id %}">Follow</a>
+    {% elif request.user.id != user.id and  is_follow %}
+        <a class="btn btn-primary" href="{% url 'account:unfollow' user.id %}">Unfollow</a>
 
+    {% endif %}
     {% for post in posts %}
 
         <div class="content-box">

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post
+from .models import Post,Relation
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -9,4 +9,5 @@ class PostAdmin(admin.ModelAdmin):
     raw_id_fields = ('user',)
 
 
-admin.site.register(Post, PostAdmin)
+admin.site.register(Post,PostAdmin)
+admin.site.register(Relation)
