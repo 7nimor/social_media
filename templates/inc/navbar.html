@@ -1,46 +1,40 @@
-<header class="hesder">
+<header class="navbar navbar-expand-lg bg-body-tertiary">
 
     <div class="col-2 content1">
-        <div class="col-3 box-home">
-            <div class="box">
-                <h2><a href="{% url 'home:home' %}">Home</a></h2>
-            </div>
-        </div>
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'home:home' %}">Home</a>
+            </li>
+        </ul>
     </div>
-    <div class="col-3 form-box">
-        <div class="search-box">
-            <input class="search-text" type="text" name="" placeholder="type to search...">
-            <button type="submit" name="">
-                <a class="search-btn" href="">
-                    <img class="icon" src="https://img.icons8.com/ios-glyphs/30/search--v1.png" alt="search--v1">
-                </a>
-            </button>
-        </div>
-        {% if request.user.is_authenticated %}
-            <div class="col-3 box-about">
-                <div class="box">
-                    <h2><a href="{% url 'account:profile' request.user.id %}">Profile</a></h2>
-                </div>
-               <div class="box">
-                    <h2><a href="{% url 'account:logout' %}">Logout</a></h2>
-                </div>
-            </div>
-        {% else %}
+    <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+    {% if request.user.is_authenticated %}
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'account:profile' request.user.id %}">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account:logout' %}">Logout</a>
+            </li>
+        </ul>
 
-            </div>
-            <div class="col-2 entrance">
-                <div class="col-3 login">
-                    <div class="box">
-                        <h2><a href="{% url 'account:login' %}">Login</a></h2>
-                    </div>
-                </div>
-                <div class="col-3 singup">
-                    <div class="box">
-                        <h2><a href="{% url 'account:register' %}">Register</a></h2>
-                    </div>
+    {% else %}
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page"
+                   href="{% url 'account:login' %}">login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page"
+                   href="{% url 'account:register' %}">Register</a>
+            </li>
 
-                </div>
-            </div>
-        {% endif %}
+        </ul>
+
+    {% endif %}
+
 
 </header>

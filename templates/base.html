@@ -8,13 +8,28 @@
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/style.css" type="text/css">
     <link rel="reasetsheet" href="/static/reset.css" type="text/css">
+    <style>
+        .jumbotron {
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #e9ecef;
+        }
+        #center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    </style>
 </head>
 
 <body>
 {% include 'inc/navbar.html' %}
 {% include 'inc/messages.html' %}
-{% block body %}
-{% endblock %}
+<div class="jumbotron">
+    {% block body %}
+    {% endblock %}
+
+</div>
 
 </body>
 </html>

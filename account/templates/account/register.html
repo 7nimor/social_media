@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 
 {% block body %}
-   <div id="center" style="border: 5px solid;
+   <div style="border: 1px solid;
   margin: auto;
   width: 50%;
-  padding: 10px;">
+  padding: 20px;">
        <form action="" method="post" novalidate>
             {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Register">
+                {{ form.as_p }}
+            <input class="btn btn-success" type="submit" value="Register">
     </form>
+
+
+
    </div>
 {% endblock %}
