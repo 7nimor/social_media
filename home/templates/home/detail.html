@@ -18,6 +18,12 @@
         <div class="card bg-dark text-white">
             <p class="card-header">{{ comment.user }} | {{ comment.created_at|timesince }} ago </p>
             <p class="card-body">{{ comment.body }}</p>
+
+            <form action="{% url 'home:replay_comment' post.id comment.id %}" method="post">
+                {% csrf_token %}
+                {{ replay_form.as_p }}
+                <input type="submit" value="send">
+            </form>
             {% with replays=comment.rcomments.all %}
                 {% for replay in replays %}
                 	<p class="bg-primary-subtle text-black p-2 m-3">{{ replay.user }} <br/> {{ replay.body }}</p>

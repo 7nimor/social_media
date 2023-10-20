@@ -14,5 +14,14 @@ class CommentCreateForm(forms.ModelForm):
         model = Comments
         fields = ('body',)
         widgets = {
-            'body': forms.TextInput(attrs={'class':"form-control", 'id':"exampleFormControlTextarea1"}),
+            'body': forms.TextInput(attrs={'class': "form-control", 'id': "exampleFormControlTextarea1"}),
+        }
+
+
+class CommentReplyForm(forms.ModelForm):
+    class Meta:
+        model = Comments
+        fields = ('body',)
+        widgets = {
+            'body': forms.TextInput(attrs={'class': "form-control", 'id': "exampleFormControlTextarea1"}),
         }

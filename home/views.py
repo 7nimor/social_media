@@ -4,9 +4,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.text import slugify
 from django.views import View
 from account.models import Post
-from .forms import PostCreateUpdateForm, CommentCreateForm
+from .forms import PostCreateUpdateForm, CommentCreateForm, CommentReplyForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from .models import Comments
 
 
 class HomeView(View):
@@ -17,6 +18,7 @@ class HomeView(View):
 
 class PostDetailView(View):
     form_class = CommentCreateForm
+    form_class_replay = CommentReplyForm
 
     def setup(self, request, *args, **kwargs):
         self.post_instance = get_object_or_404(Post, pk=kwargs['post_id'], slug=kwargs['post_slug'])
@@ -25,7 +27,8 @@ class PostDetailView(View):
     def get(self, request, *args, **kwargs):
         comments = self.post_instance.pcomments.filter(is_reply=False)
         return render(request, 'home/detail.html',
-                      {'post': self.post_instance, 'comments': comments, 'form': self.form_class})
+                      {'post': self.post_instance, 'comments': comments, 'form': self.form_class,
+                       'replay_form': self.form_class_replay})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -98,3 +101,21 @@ class PostCreateView(LoginRequiredMixin, View):
             new_post.save()
             messages.success(request, 'you create new post', 'success')
             return redirect('home:post_detail', new_post.id, new_post.slug)
+
+
+class CommentReplayView(LoginRequiredMixin, View):
+    form_class = CommentReplyForm
+
+    def post(self, request, post_id, comment_id):
+        comment = get_object_or_404(Comments, id=comment_id)
+        post = get_object_or_404(Post, id=post_id)
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            replay = form.save(commit=False)
+            replay.user = request.user
+            replay.post = post
+            replay.reply = comment
+            replay.is_replay = True
+            replay.save()
+            messages.success(request, 'your replay was successfully create', 'success')
+        return redirect('home:post_detail', post.id, post.slug)
