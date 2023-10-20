@@ -181,8 +181,14 @@ section .content .root {
     padding-right: 15px;
     padding-left: 15px;
 }
-header {
+.header {
     display: flex;
     justify-content: space-around;
+    align-items: center;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
 }
