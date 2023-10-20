@@ -7,13 +7,25 @@
     {% endif %}
     <a href="{% url 'account:profile' post.user.id %}">{{ post.user }}</a>
     <p>{{ post.body }}</p>
-    <hr>
-
+    <br/>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Send">
+    </form>
+    <hr/>
     {% for comment in comments %}
         <div class="card bg-dark text-white">
             <p class="card-header">{{ comment.user }} | {{ comment.created_at|timesince }} ago </p>
             <p class="card-body">{{ comment.body }}</p>
-        </div>
+            {% with replays=comment.rcomments.all %}
+                {% for replay in replays %}
+                	<p class="bg-primary-subtle text-black p-2 m-3">{{ replay.user }} <br/> {{ replay.body }}</p>
+                {% endfor %}
+
+
+            {% endwith %}
+        </div><br/>
     {% empty %}
         <div class="card bg-dark text-white">
             <p class="card-body"> no comment yet</p>
