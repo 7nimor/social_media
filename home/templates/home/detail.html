@@ -7,6 +7,7 @@
     {% endif %}
     <a href="{% url 'account:profile' post.user.id %}">{{ post.user }}</a>
     <p>{{ post.body }}</p>
+    <a href="{% url 'home:like_post' post.id%}" class="{% if can_like %}disabled{% endif %} btn btn-primary"> {{ post.like_count }} Like </a>
     <br/>
     <form action="" method="post">
         {% csrf_token %}

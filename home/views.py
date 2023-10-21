@@ -4,16 +4,20 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.text import slugify
 from django.views import View
 from account.models import Post
-from .forms import PostCreateUpdateForm, CommentCreateForm, CommentReplyForm
+from .forms import PostCreateUpdateForm, CommentCreateForm, CommentReplyForm, SearchForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Comments
+from .models import Comments, Like
 
 
 class HomeView(View):
+    form_class = SearchForm
+
     def get(self, request):
         posts = Post.objects.all()
-        return render(request, 'home/home.html', {'posts': posts})
+        if request.GET.get('search'):
+            posts=posts.filter(body__contains=request.GET['search'])
+        return render(request, 'home/home.html', {'posts': posts,'form': self.form_class})
 
 
 class PostDetailView(View):
@@ -26,9 +30,12 @@ class PostDetailView(View):
 
     def get(self, request, *args, **kwargs):
         comments = self.post_instance.pcomments.filter(is_reply=False)
+        can_like = False
+        if request.user.is_authenticated and self.post_instance.user_can_like(request.user):
+            can_like = True
         return render(request, 'home/detail.html',
                       {'post': self.post_instance, 'comments': comments, 'form': self.form_class,
-                       'replay_form': self.form_class_replay})
+                       'replay_form': self.form_class_replay, 'can_like': can_like})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -118,4 +125,16 @@ class CommentReplayView(LoginRequiredMixin, View):
             replay.is_replay = True
             replay.save()
             messages.success(request, 'your replay was successfully create', 'success')
+        return redirect('home:post_detail', post.id, post.slug)
+
+
+class LikePostView(LoginRequiredMixin, View):
+    def get(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        like = Like.objects.filter(post=post, user=request.user).exists()
+        if like:
+            messages.error(request, 'you already liked this post', 'danger')
+        else:
+            Like.objects.create(post=post, user=request.user)
+            messages.success(request, 'you liked this post', 'success')
         return redirect('home:post_detail', post.id, post.slug)

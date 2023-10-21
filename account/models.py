@@ -4,7 +4,7 @@ from django.urls import reverse
 
 
 class Post(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='posts')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     body = models.TextField()
     slug = models.SlugField()
     created = models.DateTimeField(auto_now_add=True)
@@ -18,6 +18,15 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('home:post_detail', args=(self.id, self.slug))
+
+    def like_count(self):
+        return self.plikes.count()
+
+    def user_can_like(self, user):
+        user_like = user.ulikes.filter(post=self)
+        if user_like.exists():
+            return True
+        return False
 
 
 class Relation(models.Model):
