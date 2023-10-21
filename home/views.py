@@ -16,8 +16,8 @@ class HomeView(View):
     def get(self, request):
         posts = Post.objects.all()
         if request.GET.get('search'):
-            posts=posts.filter(body__contains=request.GET['search'])
-        return render(request, 'home/home.html', {'posts': posts,'form': self.form_class})
+            posts = posts.filter(body__contains=request.GET['search'])
+        return render(request, 'home/home.html', {'posts': posts, 'form_nav': self.form_class})
 
 
 class PostDetailView(View):
@@ -122,7 +122,7 @@ class CommentReplayView(LoginRequiredMixin, View):
             replay.user = request.user
             replay.post = post
             replay.reply = comment
-            replay.is_replay = True
+            replay.is_reply = True
             replay.save()
             messages.success(request, 'your replay was successfully create', 'success')
         return redirect('home:post_detail', post.id, post.slug)

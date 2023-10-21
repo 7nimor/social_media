@@ -7,7 +7,8 @@
     {% endif %}
     <a href="{% url 'account:profile' post.user.id %}">{{ post.user }}</a>
     <p>{{ post.body }}</p>
-    <a href="{% url 'home:like_post' post.id%}" class="{% if can_like %}disabled{% endif %} btn btn-primary"> {{ post.like_count }} Like </a>
+    <a href="{% url 'home:like_post' post.id %}"
+       class="{% if can_like %}disabled{% endif %} btn btn-primary"> {{ post.like_count }} Like </a>
     <br/>
     <form action="" method="post">
         {% csrf_token %}
@@ -26,12 +27,12 @@
                 <input type="submit" value="send">
             </form>
             {% with replays=comment.rcomments.all %}
-                {% for replay in replays %}
-                	<p class="bg-primary-subtle text-black p-2 m-3">{{ replay.user }} <br/> {{ replay.body }}</p>
-                {% endfor %}
-
+            {% for replay in replays %}
+                <p class="bg-primary-subtle text-black p-2 m-3">{{ replay.user }} <br/> {{ replay.body }}</p>
+            {% endfor %}
 
             {% endwith %}
+
         </div><br/>
     {% empty %}
         <div class="card bg-dark text-white">
