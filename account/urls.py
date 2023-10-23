@@ -13,5 +13,6 @@ urlpatterns = [
     path('confirm/complete/',views.UserPasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('follow/<int:user_id>',views.UserFollowView.as_view(), name='follow'),
     path('unfollow/<int:user_id>',views.UserUnfollowView.as_view(), name='unfollow'),
+    path('edit_profile/',views.EditProfileView.as_view(), name='edit_profile')
 
 ]

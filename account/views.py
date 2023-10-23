@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_view
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, UserUpdateProfileForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -129,3 +129,21 @@ class UserUnfollowView(LoginRequiredMixin, View):
             messages.error(request, 'you are not follow ', 'success')
 
         return redirect('account:profile', user.id)
+
+
+class EditProfileView(LoginRequiredMixin, View):
+    form_class = UserUpdateProfileForm
+    template_name = 'account/edit_profile.html'
+
+    def get(self, request):
+        form = self.form_class(instance=self.request.user.person, initial={'email': self.request.user.email})
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form=self.form_class(request.POST,instance=self.request.user.person)
+        if form.is_valid():
+            form.save()
+            request.user.email = form.cleaned_data['email']
+            request.user.save()
+            messages.success(request,'your profile is update','success')
+        return redirect('account:profile',request.user.id)
